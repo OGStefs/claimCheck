@@ -9,7 +9,6 @@ if (major < 7 || (major === 7 && minor <= 5)) {
   process.exit();
 }
 
-// import environmental variables from our variables.env file
 dotenv.config({ path: "./.env" });
 
 import app from "./app.js";

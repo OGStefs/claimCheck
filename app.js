@@ -5,7 +5,6 @@ import legends from "./legendClaimStatus.js";
 
 // import routes from "../server/routes/index.js";
 
-// create our Express app
 const app = express();
 
 app.use(cors());
@@ -13,14 +12,13 @@ app.use(cors());
 // app.use("/", routes);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Server is running");
 });
 
-const getScript = async (req, res) => {
-  console.log(req.params.id);
-  res.send(await legends(`${req.params.id}`));
+const checkLegends = async (req, res) => {
+  res.status(200).json(await legends(`${req.params.id}`));
 };
 
-app.get("/:id", getScript);
+app.get("/:id", checkLegends);
 
 export default app;

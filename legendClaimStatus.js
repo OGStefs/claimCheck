@@ -68,25 +68,21 @@ const isClaimed = async (legend) => {
 
 const claimStatus = async (legendsInWallet) => {
   // check if legends are in wallet:
-  if (legendsInWallet.length > 0) {
-    try {
-      // iterate over wallet:
-      for (let i = 0; i < legendsInWallet.length; i++) {
-        // check claimstatus:
-        const claimed = await isClaimed(legendsInWallet[i]);
-        if (claimed) {
-          claimedLegends[legendsInWallet[i]] = "claimed";
-        } else {
-          // if unclaimed, fetch timestamp and return date
-          const block = await forgedBlock(legendsInWallet[i]);
-          claimedLegends[legendsInWallet[i]] = block;
-        }
+  try {
+    // iterate over wallet:
+    for (let i = 0; i < legendsInWallet.length; i++) {
+      // check claimstatus:
+      const claimed = await isClaimed(legendsInWallet[i]);
+      if (claimed) {
+        claimedLegends[legendsInWallet[i]] = "claimed";
+      } else {
+        // if unclaimed, fetch timestamp and return date
+        const block = await forgedBlock(legendsInWallet[i]);
+        claimedLegends[legendsInWallet[i]] = block;
       }
-    } catch (error) {
-      console.log(error.message);
     }
-  } else {
-    console.log("no legends in the wallet");
+  } catch (error) {
+    console.log(error.message);
   }
 };
 
@@ -99,10 +95,14 @@ const legends = async (wallet) => {
     const legendsInWallet = await legendsContract(web3)
       .methods.getWalletOfOwner(wallet)
       .call();
-    // ckeck claim status
-    console.log(legendsInWallet);
-    await claimStatus(legendsInWallet);
-    return claimedLegends;
+
+    if (legendsInWallet.length < 1) {
+      return "no legends in wallet";
+    } else {
+      // ckeck claim status
+      await claimStatus(legendsInWallet);
+      return claimedLegends;
+    }
   } catch (error) {
     console.log(error.message);
     return "an error occurred";
