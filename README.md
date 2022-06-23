@@ -25,7 +25,9 @@ npm start
 
 this starts a local express server on port 7777
 
-open a browser and go to http://localhost:7777/0x0b0237ad59e1bbcb611fdf0c9fa07350c3f41e87
+open a browser and go to
+
+http://localhost:7777/api/v1/0x0b0237ad59e1bbcb611fdf0c9fa07350c3f41e87
 
 (replace wallet address with your own)
 

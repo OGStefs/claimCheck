@@ -1,7 +1,7 @@
 import Web3 from "web3";
-import legendsContract from "./blockchain/abi/legendsAbi.js";
-import sisterContract from "./blockchain/abi/sister.js";
-import forgeContract from "./blockchain/abi/forge.js";
+import legendsContract from "../blockchain/abi/legendsAbi.js";
+import sisterContract from "../blockchain/abi/sister.js";
+import forgeContract from "../blockchain/abi/forge.js";
 import "dotenv/config";
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETHNODE));
