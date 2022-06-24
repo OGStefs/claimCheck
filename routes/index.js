@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { checkLegends } from "../controllers/legendController.js";
+import { checkLegends } from "../controllers/forgeController.js";
 
 router.get("/", (req, res) => {
   res.send("Server is running");

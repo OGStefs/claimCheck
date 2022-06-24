@@ -2,14 +2,17 @@ import Web3 from "web3";
 import legendsContract from "../blockchain/abi/legendsAbi.js";
 import sisterContract from "../blockchain/abi/sister.js";
 import forgeContract from "../blockchain/abi/forge.js";
+import azukiContract from "../blockchain/abi/azukiAbi.js";
 import "dotenv/config";
 
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETHNODE));
+const web3 = new Web3(
+  new Web3.providers.HttpProvider(process.env.LOCAL_ETH_NODE)
+);
 
 let claimedLegends = {};
 let walletAddress = "";
 
-const forgeAddress = async (legend) => {
+const legendForgeAddress = async (legend) => {
   try {
     const forger = await forgeContract(web3)
       .methods._legendsTokenForges(legend)
@@ -20,10 +23,21 @@ const forgeAddress = async (legend) => {
   }
 };
 
-const forgedBlock = async (legend) => {
+const azukiForgeAddress = async (legend) => {
+  try {
+    const forger = await forgeContract(web3)
+      .methods._azukiTokenForges(legend)
+      .call();
+    return forger.toUpperCase();
+  } catch (error) {
+    return error.message;
+  }
+};
+
+const legendForgeBlock = async (legend) => {
   // check if hodler is forger
   try {
-    const whoForged = await forgeAddress(legend);
+    const whoForged = await legendForgeAddress(legend);
     if (
       whoForged != walletAddress &&
       whoForged != "0X0000000000000000000000000000000000000000"
@@ -31,12 +45,12 @@ const forgedBlock = async (legend) => {
       return "somebody else still forges this item";
     }
     // fetch forgeBlock from contract:
-    const forgedBlock = await forgeContract(web3)
+    const legendForgeBlock = await forgeContract(web3)
       .methods._legendsForgeBlocks(legend)
       .call();
 
     // time math:
-    const block = await web3.eth.getBlock(forgedBlock);
+    const block = await web3.eth.getBlock(legendForgeBlock);
     const blockTime = block.timestamp * 1000;
     const minForgePeriod = 30 * 24 * 60 * 60 * 1000;
     const claimDate = blockTime + minForgePeriod;
@@ -56,7 +70,43 @@ const forgedBlock = async (legend) => {
   }
 };
 
-const isClaimed = async (legend) => {
+const azukiForgeBlock = async (legend) => {
+  // check if hodler is forger
+  try {
+    const whoForged = await azukiForgeAddress(legend);
+    if (
+      whoForged != walletAddress &&
+      whoForged != "0X0000000000000000000000000000000000000000"
+    ) {
+      return "somebody else still forges this item";
+    }
+    // fetch forgeBlock from contract:
+    const legendForgeBlock = await forgeContract(web3)
+      .methods._azukiForgeBlocks(legend)
+      .call();
+
+    // time math:
+    const block = await web3.eth.getBlock(legendForgeBlock);
+    const blockTime = block.timestamp * 1000;
+    const minForgePeriod = 30 * 24 * 60 * 60 * 1000;
+    const claimDate = blockTime + minForgePeriod;
+    if (blockTime === 0) return "not in the forge";
+
+    // todo: remove timezone
+    const wenClaimable =
+      Date.now() > claimDate
+        ? "claimable now"
+        : `claimable ${new Date(claimDate).toLocaleString("en-US", {
+            timeZone: "America/New_York",
+          })}`;
+
+    return wenClaimable;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+const isLegendClaimed = async (legend) => {
   // check if Legend is claimed:
   try {
     const status = sisterContract(web3).methods.legendsClaimed(legend).call();
@@ -66,47 +116,103 @@ const isClaimed = async (legend) => {
   }
 };
 
-const claimStatus = async (legendsInWallet) => {
-  // check if legends are in wallet:
+const isAzukiClaimed = async (legend) => {
+  // check if Legend is claimed:
+  try {
+    const status = sisterContract(web3).methods.azukiClaimed(legend).call();
+    return status;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+const checkLegends = async (legendsInWallet) => {
+  const items = {};
+  // no legends? return empty
+  if (legendsInWallet.length < 1) {
+    return { count: 0, status: "empty" };
+  }
+
   try {
     // iterate over wallet:
     for (let i = 0; i < legendsInWallet.length; i++) {
       // check claimstatus:
-      const claimed = await isClaimed(legendsInWallet[i]);
+      const claimed = await isLegendClaimed(legendsInWallet[i]);
       if (claimed) {
-        claimedLegends[legendsInWallet[i]] = "claimed";
+        items[legendsInWallet[i]] = "claimed";
       } else {
         // if unclaimed, fetch timestamp and return date
-        const block = await forgedBlock(legendsInWallet[i]);
-        claimedLegends[legendsInWallet[i]] = block;
+        const block = await legendForgeBlock(legendsInWallet[i]);
+        items[legendsInWallet[i]] = block;
       }
     }
+    return { count: legendsInWallet.length, status: "ok", items };
   } catch (error) {
-    console.log(error.message);
+    return { status: "error", error: error.message };
   }
 };
 
-// entry point:
-const legends = async (wallet) => {
-  claimedLegends = {};
-  walletAddress = wallet.toUpperCase();
+const checkAzukis = async (legendsInWallet) => {
+  const items = {};
+  // no legends? return empty
+  if (legendsInWallet.length < 1) {
+    return { count: 0, status: "empty" };
+  }
+
+  try {
+    // iterate over wallet:
+    for (let i = 0; i < legendsInWallet.length; i++) {
+      // check claimstatus:
+      const claimed = await isAzukiClaimed(legendsInWallet[i]);
+      if (claimed) {
+        items[legendsInWallet[i]] = "claimed";
+      } else {
+        // if unclaimed, fetch timestamp and return date
+        const block = await azukiForgeBlock(legendsInWallet[i]);
+        items[legendsInWallet[i]] = block;
+      }
+    }
+    return { count: legendsInWallet.length, status: "ok", items };
+  } catch (error) {
+    return { status: "error", error: error.message };
+  }
+};
+
+const walletCheck = async (wallet) => {
   try {
     // check for legends in wallet
     const legendsInWallet = await legendsContract(web3)
       .methods.getWalletOfOwner(wallet)
       .call();
 
-    if (legendsInWallet.length < 1) {
-      return "no legends in wallet";
-    } else {
-      // ckeck claim status
-      await claimStatus(legendsInWallet);
-      return claimedLegends;
-    }
+    // check for azukis in wallet
+    const azukisInWallet = await azukiContract(web3)
+      .methods.owned(wallet)
+      .call();
+
+    return { legends: legendsInWallet, azukis: azukisInWallet };
   } catch (error) {
     console.log(error.message);
     return "an error occurred";
   }
 };
 
-export default legends;
+// TODO: check ERC-721 ABI / delete unnecessary code / possibly use only 1 ABI for all partners
+// TODO: add partners
+// entry point:
+const claimStatus = async (wallet) => {
+  claimedLegends = {};
+  walletAddress = wallet.toUpperCase();
+  try {
+    const ownerWallet = await walletCheck(wallet);
+
+    const legendsStatus = await checkLegends(ownerWallet.legends);
+    const azukiStatus = await checkAzukis(ownerWallet.azukis);
+    return { legends: legendsStatus, azukis: azukiStatus };
+  } catch (error) {
+    console.log(error.message);
+    return "an error occurred";
+  }
+};
+
+export default claimStatus;
