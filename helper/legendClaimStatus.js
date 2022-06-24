@@ -5,9 +5,7 @@ import forgeContract from "../blockchain/abi/forge.js";
 import azukiContract from "../blockchain/abi/azukiAbi.js";
 import "dotenv/config";
 
-const web3 = new Web3(
-  new Web3.providers.HttpProvider(process.env.LOCAL_ETH_NODE)
-);
+const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETHNODE));
 
 let claimedLegends = {};
 let walletAddress = "";
@@ -211,7 +209,7 @@ const claimStatus = async (wallet) => {
     return { legends: legendsStatus, azukis: azukiStatus };
   } catch (error) {
     console.log(error.message);
-    return "an error occurred";
+    return "an error occurred in claimstatus";
   }
 };
 
