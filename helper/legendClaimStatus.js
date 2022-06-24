@@ -127,7 +127,7 @@ const isAzukiClaimed = async (legend) => {
 const checkLegends = async (legendsInWallet) => {
   const items = {};
   // no legends? return empty
-  if (legendsInWallet.length < 1) {
+  if (!legendsInWallet || legendsInWallet.length < 1) {
     return { count: 0, status: "empty" };
   }
 
@@ -153,7 +153,7 @@ const checkLegends = async (legendsInWallet) => {
 const checkAzukis = async (legendsInWallet) => {
   const items = {};
   // no legends? return empty
-  if (legendsInWallet.length < 1) {
+  if (!legendsInWallet || legendsInWallet.length < 1) {
     return { count: 0, status: "empty" };
   }
 
@@ -191,7 +191,7 @@ const walletCheck = async (wallet) => {
     return { legends: legendsInWallet, azukis: azukisInWallet };
   } catch (error) {
     console.log(error.message);
-    return "an error occurred";
+    return { error: error.message };
   }
 };
 
@@ -209,7 +209,7 @@ const claimStatus = async (wallet) => {
     return { legends: legendsStatus, azukis: azukiStatus };
   } catch (error) {
     console.log(error.message);
-    return "an error occurred in claimstatus";
+    return { error: error.message };
   }
 };
 
