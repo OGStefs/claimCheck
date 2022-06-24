@@ -152,6 +152,14 @@ const checkLegends = async (legendsInWallet) => {
 
 const checkAzukis = async (legendsInWallet) => {
   const items = {};
+  // TODO: fix azuki out of gas error
+  if (legendsInWallet?.error !== undefined) {
+    return {
+      status: "error",
+      error: legendsInWallet,
+      msg: "gas error in azuki contract needs to be fixed",
+    };
+  }
   // no legends? return empty
   if (!legendsInWallet || legendsInWallet.length < 1) {
     return { count: 0, status: "empty" };
@@ -182,16 +190,17 @@ const walletCheck = async (wallet) => {
     const legendsInWallet = await legendsContract(web3)
       .methods.getWalletOfOwner(wallet)
       .call();
-
     // check for azukis in wallet
-    const azukisInWallet = await azukiContract(web3)
-      .methods.owned(wallet)
-      .call();
-
+    let azukisInWallet;
+    try {
+      azukisInWallet = await azukiContract(web3).methods.owned(wallet).call();
+    } catch (error) {
+      azukisInWallet = { error: error.message };
+    }
     return { legends: legendsInWallet, azukis: azukisInWallet };
   } catch (error) {
-    console.log(error.message);
-    return { error: error.message };
+    console.log({ error: error.message, from: "walletCheck" });
+    return { error: error.message, from: "walletCheck" };
   }
 };
 
@@ -203,13 +212,12 @@ const claimStatus = async (wallet) => {
   walletAddress = wallet.toUpperCase();
   try {
     const ownerWallet = await walletCheck(wallet);
-
     const legendsStatus = await checkLegends(ownerWallet.legends);
     const azukiStatus = await checkAzukis(ownerWallet.azukis);
     return { legends: legendsStatus, azukis: azukiStatus };
   } catch (error) {
-    console.log(error.message);
-    return { error: error.message };
+    console.log({ error: error.message, from: "claimStatus" });
+    return { error: error.message, from: "claimStatus" };
   }
 };
 
