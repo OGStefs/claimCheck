@@ -1,4 +1,4 @@
-import claimStatus from "../helper/legendClaimStatus.js";
+import claimStatus from "../services/legendClaimStatus.js";
 
 export const checkLegends = async (req, res) => {
   try {

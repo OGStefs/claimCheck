@@ -4,11 +4,14 @@ import sisterContract from "../blockchain/abi/sister.js";
 import forgeContract from "../blockchain/abi/forge.js";
 import azukiContract from "../blockchain/abi/azukiAbi.js";
 import "dotenv/config";
+import { wenClaimable } from "../utils/wenClaimable.js";
+import { walletCheck } from "../utils/getPartnersInWallet.js";
+import { web3 } from "../utils/web3Init.js";
 
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETHNODE));
+// const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETHNODE));
 
-let claimedLegends = {};
 let walletAddress = "";
+let claimedLegends = {};
 
 const legendForgeAddress = async (legend) => {
   try {
@@ -47,22 +50,11 @@ const legendForgeBlock = async (legend) => {
       .methods._legendsForgeBlocks(legend)
       .call();
 
-    // time math:
     const block = await web3.eth.getBlock(legendForgeBlock);
-    const blockTime = block.timestamp * 1000;
-    const minForgePeriod = 30 * 24 * 60 * 60 * 1000;
-    const claimDate = blockTime + minForgePeriod;
-    if (blockTime === 0) return "not in the forge";
+    // time math:
+    const claimeTime = wenClaimable(block.timestamp);
 
-    // todo: remove timezone
-    const wenClaimable =
-      Date.now() > claimDate
-        ? "claimable now"
-        : `claimable ${new Date(claimDate).toLocaleString("en-US", {
-            timeZone: "America/New_York",
-          })}`;
-
-    return wenClaimable;
+    return claimeTime;
   } catch (error) {
     return error.message;
   }
@@ -181,26 +173,6 @@ const checkAzukis = async (legendsInWallet) => {
     return { count: legendsInWallet.length, status: "ok", items };
   } catch (error) {
     return { status: "error", error: error.message };
-  }
-};
-
-const walletCheck = async (wallet) => {
-  try {
-    // check for legends in wallet
-    const legendsInWallet = await legendsContract(web3)
-      .methods.getWalletOfOwner(wallet)
-      .call();
-    // check for azukis in wallet
-    let azukisInWallet;
-    try {
-      azukisInWallet = await azukiContract(web3).methods.owned(wallet).call();
-    } catch (error) {
-      azukisInWallet = { error: error.message };
-    }
-    return { legends: legendsInWallet, azukis: azukisInWallet };
-  } catch (error) {
-    console.log({ error: error.message, from: "walletCheck" });
-    return { error: error.message, from: "walletCheck" };
   }
 };
 
