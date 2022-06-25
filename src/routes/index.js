@@ -1,10 +1,20 @@
 import express from "express";
+import http from "http";
 const router = express.Router();
 
 import { checkLegends } from "../controllers/forgeController.js";
 
+// const testHTML = `
+// <div style="width:400px; margin:0 auto">
+// <form style="width:400px; margin:0 auto" action="/api/v1/address/">
+//   <label for="address">Enter ETH address:</label><br>
+//   <input style="width:400px; margin:5 auto" type="text" id="address" name="address"><br>
+//   <input style="width:100px; margin:10 auto" type="submit" value="Submit">
+// </form>
+// </div>`;
+
 router.get("/", (req, res) => {
-  res.send("Server is running");
+  res.status(200).send("server running");
 });
 
 // SCRIPT
