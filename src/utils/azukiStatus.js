@@ -24,7 +24,7 @@ const azukiForgeBlock = async (item) => {
       whoForged != walletAddress &&
       whoForged != "0X0000000000000000000000000000000000000000"
     ) {
-      return `somebody else still forges this item ${whoForged}`;
+      return `somebody else still forges this item: ${whoForged}`;
     }
     // fetch forgeBlock from contract:
     const itemForgeBlock = await forgeContract(web3)
