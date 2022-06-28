@@ -2,7 +2,7 @@ import express from "express";
 import http from "http";
 const router = express.Router();
 
-import { checkLegends } from "../controllers/forgeController.js";
+import { checkLegends, invaderOwners } from "../controllers/forgeController.js";
 
 // const testHTML = `
 // <div style="width:400px; margin:0 auto">
@@ -18,7 +18,9 @@ router.get("/", (req, res) => {
 });
 
 // SCRIPT
-router.get("/:id", checkLegends);
+router.get("/forge/:id", checkLegends);
+
+router.get("/invaders", invaderOwners);
 // router.get("/scripts/:id", getScript);
 
 // router.post("/scripts", createScript);
