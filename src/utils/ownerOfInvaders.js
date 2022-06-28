@@ -5,9 +5,7 @@ import { walletCheck } from "./getPartnersInWallet.js";
 const ownerOfInvaders = async (supply) => {
   let allOwners = {};
   try {
-    const start = Date.now();
-
-    for (let i = 3100; i < supply; i++) {
+    for (let i = 1; i < supply; i++) {
       const owner = await invadersContract(web3).methods.ownerOf(i).call();
       if (owner in allOwners) {
         allOwners[owner].invaders.items.push(i);
@@ -15,10 +13,7 @@ const ownerOfInvaders = async (supply) => {
       } else {
         allOwners[owner] = { invaders: { count: 1, items: [i] } };
       }
-      //   allOwners[i] = owner;
     }
-    console.log((Date.now() - start) / 1000);
-    // const mappedOwners = ownerMap(allOwners);
     return allOwners;
   } catch (error) {
     return { error: error.message, message: "from ownerOfInvaders" };
@@ -42,7 +37,6 @@ const partnersInWallet = async (owners) => {
   try {
     for (const owner of Object.keys(owners)) {
       const wallet = await walletCheck(owner);
-      console.log(wallet);
       partners[owner] = {
         invaders: owners[owner].invaders,
         legends: { count: wallet.legends.length, items: wallet.legends },
