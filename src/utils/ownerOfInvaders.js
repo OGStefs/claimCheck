@@ -5,7 +5,7 @@ import { walletCheck } from "./getPartnersInWallet.js";
 const ownerOfInvaders = async (supply) => {
   let allOwners = {};
   try {
-    for (let i = 1; i < supply; i++) {
+    for (let i = 3200; i < supply; i++) {
       const owner = await invadersContract(web3).methods.ownerOf(i).call();
       if (owner in allOwners) {
         allOwners[owner].invaders.items.push(i);
