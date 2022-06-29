@@ -1,7 +1,8 @@
 import "dotenv/config";
 import { walletCheck } from "../utils/getPartnersInWallet.js";
-import { checkLegends } from "../utils/legendStatus.js";
-import { checkAzukis } from "../utils/azukiStatus.js";
+import { checkLegends } from "../utils/claimStatus/legendStatus.js";
+import { checkAzukis } from "../utils/claimStatus/azukiStatus.js";
+import { checkTigers } from "../utils/claimStatus/tigerStatus.js";
 
 let walletAddress = "";
 let claimedPartners = {};
@@ -21,7 +22,9 @@ const claimStatus = async (wallet) => {
 
     const azukiStatus = await checkAzukis(ownerWallet.azukis, walletAddress);
 
-    return { legends: legendsStatus, azukis: azukiStatus };
+    const tigerStatus = await checkTigers(ownerWallet.tigers, walletAddress);
+
+    return { legends: legendsStatus, azukis: azukiStatus, tigers: tigerStatus };
   } catch (error) {
     console.log({ error: error.message, from: "claimStatus" });
     return { error: error.message, from: "claimStatus" };

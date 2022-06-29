@@ -1,7 +1,7 @@
-import forgeContract from "../blockchain/abi/forge.js";
-import sisterContract from "../blockchain/abi/sister.js";
-import { web3 } from "../utils/web3Init.js";
-import { wenClaimable } from "./wenClaimable.js";
+import forgeContract from "../../blockchain/abi/forge.js";
+import sisterContract from "../../blockchain/abi/sister.js";
+import { web3 } from "../web3Init.js";
+import { wenClaimable } from "../wenClaimable.js";
 
 let walletAddress = "";
 

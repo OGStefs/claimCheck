@@ -41,6 +41,7 @@ const partnersInWallet = async (owners) => {
         invaders: owners[owner].invaders,
         legends: { count: wallet.legends.length, items: wallet.legends },
         azukis: { count: wallet.azukis.length, items: wallet.azukis },
+        tigers: { count: wallet.tigers.length, items: wallet.tigers },
       };
     }
     return partners;
@@ -49,9 +50,16 @@ const partnersInWallet = async (owners) => {
 
 export const ownerWallets = async () => {
   try {
+    const start = Date.now();
     const supply = await getTotalSupply();
+    const step1 = Date.now() - start;
+    console.log("supply: ", step1, "Milliseconds");
     const owners = await ownerOfInvaders(supply);
+    const step2 = Date.now() - start;
+    console.log("owners: ", step2 / 1000, "seconds");
     const partners = await partnersInWallet(owners);
+    const step3 = Date.now() - start;
+    console.log("partners: ", step3 / 1000, "seconds");
     return partners;
   } catch (error) {
     return { error: error.message, message: "from ownerWallets" };
