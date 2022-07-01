@@ -13,22 +13,6 @@ const legendsInWallet = async (wallet) => {
   }
 };
 
-// const tokenOfOwnerbyIndexFundaes = async (wallet, balance) => {
-//   const walletBalance = [];
-//   balance++;
-//   try {
-//     for (let i = 1; i < balance; i++) {
-//       const token = await fundaesContract(web3)
-//         .methods.tokenOfOwnerByIndex(wallet, i)
-//         .call();
-//       walletBalance.push(token);
-//     }
-//     return walletBalance;
-//   } catch (error) {
-//     return { error: error.message, from: "tokenOfOwnerbyIndexFundaes" };
-//   }
-// };
-
 const tokenOfOwnerbyIndex = async (wallet, collection, balance) => {
   const walletBalance = [];
   try {
