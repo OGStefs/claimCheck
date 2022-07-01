@@ -6,6 +6,7 @@ const ownerOfInvaders = async (supply) => {
   let allOwners = {};
   try {
     for (let i = 1; i < supply; i++) {
+      if (i % 10 === 0) console.log(i);
       const owner = await invadersContract(web3).methods.ownerOf(i).call();
       if (owner in allOwners) {
         allOwners[owner].invaders.items.push(i);
