@@ -1,8 +1,6 @@
 import { ethers } from "ethers";
 
-const provider = new ethers.providers.JsonRpcProvider(
-  "http://192.168.178.57:8545/"
-);
+const provider = new ethers.providers.JsonRpcProvider(process.env.ETHNODE);
 
 export const getEns = async (address) => {
   try {
