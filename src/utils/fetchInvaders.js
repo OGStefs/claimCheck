@@ -5,7 +5,7 @@ import invaderWallets from "../services/invaderWallets.js";
 schedule(" */30 * * * *", async () => {
   const owners = await invaderWallets();
   const ownersWithTime = {
-    time: new Date(Date.now()).toLocaleString(),
+    time_EST: new Date(Date.now()).toLocaleString("en-US", { timeZone: "EST" }),
     owners,
   };
   safeToFile(ownersWithTime);
