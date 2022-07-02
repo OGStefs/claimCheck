@@ -10,6 +10,6 @@ const app = express();
 
 app.use(cors());
 
-app.use("/api/v1/", routes);
+app.use("/", routes);
 
 export default app;

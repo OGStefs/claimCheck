@@ -18,9 +18,9 @@ router.get("/", (req, res) => {
 });
 
 // SCRIPT
-router.get("/forge/:id", checkLegends);
+router.get("/api/v1/forge/:id", checkLegends);
 
-router.get("/invaders", invaderOwners);
+router.get("/api/v1/invaders", invaderOwners);
 // router.get("/scripts/:id", getScript);
 
 // router.post("/scripts", createScript);
