@@ -4,6 +4,7 @@ import { checkLegends } from "../utils/claimStatus/legendStatus.js";
 import { checkAzukis } from "../utils/claimStatus/azukiStatus.js";
 import { checkTigers } from "../utils/claimStatus/tigerStatus.js";
 import { checkFundaes } from "../utils/claimStatus/fundaeStatus.js";
+import { getEns } from "../utils/getENS.js";
 
 let walletAddress = "";
 let claimedPartners = {};
@@ -27,8 +28,11 @@ const claimStatus = async (wallet) => {
     const tigerStatus = await checkTigers(ownerWallet.tigers, walletAddress);
 
     const fundaeStatus = await checkFundaes(ownerWallet.fundaes, walletAddress);
+
+    const ensResolver = await getEns(walletAddress);
     console.log((Date.now() - start) / 1000);
     return {
+      ens: ensResolver,
       legends: legendsStatus,
       azukis: azukiStatus,
       tigers: tigerStatus,

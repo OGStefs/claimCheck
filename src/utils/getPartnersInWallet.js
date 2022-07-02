@@ -55,21 +55,6 @@ const balanceOf = async (wallet, collection) => {
   }
 };
 
-// const tokenOfOwnerbyIndexTiger = async (wallet, balance) => {
-//   const walletBalance = [];
-//   try {
-//     for (let i = 0; i < balance; i++) {
-//       const token = await tigerContract(web3)
-//         .methods.tokenOfOwnerByIndex(wallet, i)
-//         .call();
-//       walletBalance.push(token);
-//     }
-//     return walletBalance;
-//   } catch (error) {
-//     return { error: error.message, from: "tokenOfOwnerbyIndexTiger" };
-//   }
-// };
-
 export const walletCheck = async (wallet) => {
   // const blTigers = await balanceOfTigers(wallet);
   const tigerBalance = await balanceOf(wallet, "tigers");
@@ -85,11 +70,5 @@ export const walletCheck = async (wallet) => {
   const fundae = await tokenOfOwnerbyIndex(wallet, "fundaes", fundaesBalance);
   const ll = await legendsInWallet(wallet);
 
-  console.log({
-    legends: ll,
-    azukis: aasc,
-    tigers: typicalTigers,
-    fundaes: fundae,
-  });
   return { legends: ll, azukis: aasc, tigers: typicalTigers, fundaes: fundae };
 };

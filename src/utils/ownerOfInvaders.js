@@ -1,12 +1,13 @@
 import invadersContract from "../blockchain/abi/invadersAbi.js";
 import { web3 } from "../utils/web3Init.js";
+import { getEns } from "./getENS.js";
 import { walletCheck } from "./getPartnersInWallet.js";
 
 const ownerOfInvaders = async (supply) => {
   let allOwners = {};
   try {
     for (let i = 1; i < supply; i++) {
-      if (i % 10 === 0) console.log(i);
+      if (i % 100 === 0) console.log(i);
       const owner = await invadersContract(web3).methods.ownerOf(i).call();
       if (owner in allOwners) {
         allOwners[owner].invaders.items.push(i);
@@ -38,7 +39,9 @@ const partnersInWallet = async (owners) => {
   try {
     for (const owner of Object.keys(owners)) {
       const wallet = await walletCheck(owner);
+      const ensResolver = await getEns(owner);
       partners[owner] = {
+        ens: ensResolver,
         invaders: owners[owner].invaders,
         legends: { count: wallet.legends.length, items: wallet.legends },
         azukis: { count: wallet.azukis.length, items: wallet.azukis },

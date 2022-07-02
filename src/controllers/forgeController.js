@@ -13,8 +13,6 @@ const getData = async () => {
     console.log(error.message);
     json = { error: error.message };
   }
-
-  console.log(json);
   return json;
 };
 
