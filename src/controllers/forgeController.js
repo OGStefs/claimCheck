@@ -2,12 +2,12 @@ import invaderWallets from "../services/invaderWallets.js";
 import claimStatus from "../services/partnerClaimStatus.js";
 import { readFile } from "fs/promises";
 
-const getData = async () => {
+const getData = async (partner = "wallets") => {
   let json = {};
 
   try {
     json = JSON.parse(
-      await readFile(new URL("../storage/wallets.json", import.meta.url))
+      await readFile(new URL(`../storage/${partner}.json`, import.meta.url))
     );
   } catch (error) {
     console.log(error.message);
@@ -35,6 +35,24 @@ export const invaderOwners = async (req, res) => {
     res.status(200).json({ wallets: data });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: error.errors });
+  }
+};
+
+export const getAzukis = async (req, res) => {
+  try {
+    const data = await getData("azukis");
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.errors });
+  }
+};
+
+export const getLegends = async (req, res) => {
+  try {
+    const data = await getData("legends");
+    res.status(200).json(data);
+  } catch (error) {
     res.status(500).json({ message: error.errors });
   }
 };

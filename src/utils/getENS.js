@@ -1,6 +1,8 @@
 import { ethers } from "ethers";
 
-const provider = new ethers.providers.JsonRpcProvider(process.env.ETHNODE);
+const provider = new ethers.providers.WebSocketProvider(
+  process.env.WS_ETHNODE || "ws://192.168.178.57:8546/"
+);
 
 export const getEns = async (address) => {
   try {

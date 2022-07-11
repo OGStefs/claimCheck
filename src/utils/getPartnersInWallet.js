@@ -7,7 +7,11 @@ import fundaesContract from "../blockchain/abi/fundaesAbi.js";
 // check for legends in wallet
 const legendsInWallet = async (wallet) => {
   try {
-    return await legendsContract(web3).methods.getWalletOfOwner(wallet).call();
+    const legends = await legendsContract(web3)
+      .methods.getWalletOfOwner(wallet)
+      .call();
+    console.log(legends);
+    return legends;
   } catch (error) {
     return { error: error.message, from: "LegendsWalletCheck" };
   }
@@ -46,6 +50,7 @@ const balanceOf = async (wallet, collection) => {
       balance = await fundaesContract(web3).methods.balanceOf(wallet).call();
     } else if (collection === "azukis") {
       balance = await azukiContract(web3).methods.balanceOf(wallet).call();
+      console.log(balance);
     } else if (collection === "tigers") {
       balance = await tigerContract(web3).methods.balanceOf(wallet).call();
     }
@@ -56,6 +61,15 @@ const balanceOf = async (wallet, collection) => {
 };
 
 export const walletCheck = async (wallet) => {
+  web3.eth.net
+    .isListening()
+    .then(() => console.log("is connected"))
+    .catch((e) => console.log("not connected"));
+  // if (!web3Success) {
+  //   return { error: "not conected" };
+  // }
+  const blockNumber = await web3.eth.getBlockNumber();
+  console.log(blockNumber);
   // const blTigers = await balanceOfTigers(wallet);
   const tigerBalance = await balanceOf(wallet, "tigers");
   const typicalTigers = await tokenOfOwnerbyIndex(

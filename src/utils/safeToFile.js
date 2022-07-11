@@ -1,10 +1,12 @@
 import fs from "fs";
 
-export const safeToFile = async (json) => {
+export const safeToFile = async (json, collection = "wallets") => {
   var jsonContent = JSON.stringify(json);
   console.log("SAFETOFILE: ", jsonContent);
   fs.writeFile(
-    "./src/storage/wallets.json",
+    `./src/storage/${collection}.json`,
+    // `${collection}.json`,
+
     jsonContent,
     "utf8",
     function (err) {
@@ -13,7 +15,8 @@ export const safeToFile = async (json) => {
         return console.log(err);
       }
 
-      console.log("JSON file has been saved.");
+      console.log(`JSON file for ${collection} has been saved.`);
     }
   );
+  return;
 };
