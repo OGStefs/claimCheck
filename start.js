@@ -12,6 +12,8 @@ if (major < 7 || (major === 7 && minor <= 5)) {
 
 dotenv.config({ path: "./.env" });
 
+console.log(app.get("env"));
+
 mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
@@ -20,7 +22,7 @@ mongoose
   .then(() => console.log("connected to database"));
 mongoose.Promise = global.Promise; // Tell Mongoose to use ES6 promises
 mongoose.connection.on("error", (err) => {
-  console.error(`🙅 🚫 🙅 🚫 🙅 🚫 🙅 🚫 → ${err.message}`);
+  console.error(`🙅 🚫 🙅 🚫 🙅 🚫 🙅 🚫 → MongoDB ERROR${err.message}`);
 });
 
 import app from "./app.js";
