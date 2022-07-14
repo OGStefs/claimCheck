@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node start.js"
+    "start": "node start.js",
+    "dev": "npm run development",
+    "development": "NODE_ENV=development nodemon start.js"
   },
   "author": "",
   "license": "ISC",
@@ -17,7 +19,7 @@
     "express": "^4.18.1",
     "mongoose": "^6.4.4",
     "node-cron": "^3.0.1",
-    "nodemon": "^2.0.16",
+    "nodemon": "^2.0.19",
     "web3": "^1.7.4"
   }
 }

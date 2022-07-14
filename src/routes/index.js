@@ -1,4 +1,8 @@
 import express from "express";
+import {
+  getAzukiSnapshot,
+  getLegendsSnapshot,
+} from "../controllers/azukiController.js";
 const router = express.Router();
 
 import {
@@ -15,7 +19,9 @@ router.get("/", (req, res) => {
 router.get("/api/v1/forge/:id", checkLegends);
 
 router.get("/api/v1/invaders", invaderOwners);
-router.get("/api/v1/legends", getLegends);
-router.get("/api/v1/azukis", getAzukis);
+router.get("/api/v1/legends", getLegendsSnapshot);
+router.get("/api/v1/azukis", getAzukiSnapshot);
+
+// router.get("/api/v1/test", getAzukiSnapshot);
 
 export default router;
