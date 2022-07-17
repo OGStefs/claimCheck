@@ -1,6 +1,6 @@
-// import { schedule } from "node-cron";
-// import { safeToFile } from "../utils/safeToFile.js";
-// import invaderWallets from "../services/invaderWallets.js";
+import { schedule } from "node-cron";
+import { safeToFile } from "../utils/safeToFile.js";
+import invaderWallets from "../services/invaderWallets.js";
 // import { fetchAzukis } from "./data/getAzukis.js";
 // import { fetchLegends } from "./data/getLegends.js";
 // import { fetchInvaders } from "./data/getInvaders.js";
