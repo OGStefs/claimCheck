@@ -7,6 +7,11 @@ export const web3 =
 
 //TODO: check blocktime against provider -> if difference too big, change provider
 
-// const web3Test = new Web3(
+// console.log("web3init", process.env.ETHNODE);
+
+// export const web3 = new Web3(
 //   new Web3.providers.HttpProvider(process.env.ETHNODE)
 // );
+
+const blockNumber = await web3.eth.getBlockNumber();
+console.log(blockNumber);

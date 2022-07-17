@@ -12,21 +12,32 @@ if (major < 7 || (major === 7 && minor <= 5)) {
 
 dotenv.config({ path: "./.env" });
 
+// show environment in console
 console.log(app.get("env"));
+
+import app from "./app.js";
+// import { fetchInvaders } from "./src/utils/fetchInvaders.js";
 
 mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("connected to database"));
+  .then(() => {
+    console.log("connected to database");
+  })
+  .then(() => {
+    app.set("port", process.env.PORT || 7777);
+    const server = app.listen(app.get("port"), () => {
+      console.log(`Express running → PORT ${server.address().port}`);
+    });
+  })
+  // TODO: find a secure solution to run the fetch script at the right moment (and independent from the main task)
+  .then(() => {
+    // fetchInvaders();
+  });
+
 mongoose.Promise = global.Promise; // Tell Mongoose to use ES6 promises
 mongoose.connection.on("error", (err) => {
   console.error(`🙅 🚫 🙅 🚫 🙅 🚫 🙅 🚫 → MongoDB ERROR${err.message}`);
-});
-
-import app from "./app.js";
-app.set("port", process.env.PORT || 7777);
-const server = app.listen(app.get("port"), () => {
-  console.log(`Express running → PORT ${server.address().port}`);
 });
