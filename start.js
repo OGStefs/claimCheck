@@ -31,11 +31,11 @@ mongoose
     const server = app.listen(app.get("port"), () => {
       console.log(`Express running → PORT ${server.address().port}`);
     });
-  })
-  // TODO: find a secure solution to run the fetch script at the right moment (and independent from the main task)
-  .then(() => {
-    // fetchInvaders();
   });
+// TODO: find a secure solution to run the fetch script at the right moment (and independent from the main task)
+// .then(() => {
+//   fetchInvaders();
+// });
 
 mongoose.Promise = global.Promise; // Tell Mongoose to use ES6 promises
 mongoose.connection.on("error", (err) => {

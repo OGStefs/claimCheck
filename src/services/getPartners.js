@@ -32,6 +32,7 @@ export const saveSnapshot = async (items, collection) => {
           break;
       }
       console.log(`${collection} Snaphot saved`);
+      entity = {};
     } else {
       console.log(`An error occured,  ${collection} not saved`);
     }
@@ -80,7 +81,6 @@ const supply = 3334;
 export const getPartners = async (collection) => {
   console.log(collection);
   const ownerList = await ownerOf(supply, collection);
-  console.log(ownerList);
   await saveSnapshot(ownerList, collection);
   // safeToFile(azukis.ownerArray, "azukis");
 };

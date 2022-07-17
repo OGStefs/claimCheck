@@ -10,6 +10,10 @@
     "dev": "npm run development",
     "development": "NODE_ENV=development nodemon start.js"
   },
+  "engines": {
+    "node": "17.2.0",
+    "npm": "8.12.1"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
