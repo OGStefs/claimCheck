@@ -3,6 +3,7 @@ import {
   getAzukiSnapshot,
   getLegendsSnapshot,
   getInvadersSnapshot,
+  getTopHolders,
 } from "../controllers/partnerController.js";
 const router = express.Router();
 
@@ -19,5 +20,7 @@ router.get("/api/v1/owners", invaderOwners);
 router.get("/api/v1/legends", getLegendsSnapshot);
 router.get("/api/v1/azukis", getAzukiSnapshot);
 router.get("/api/v1/invaders", getInvadersSnapshot);
+
+router.get("/api/v1/topholders", getTopHolders);
 
 export default router;
