@@ -1,6 +1,7 @@
 import azukiContract from "../blockchain/abi/azukiAbi.js";
 import legendsContract from "../blockchain/abi/legendsAbi.js";
 import invadersContract from "../blockchain/abi/invadersAbi.js";
+import bekxArtContract from "../blockchain/abi/bekxArtAbi.js";
 
 // import { safeToFile } from "../safeToFile.js";
 import { getEns } from "../utils/getENS.js";
@@ -8,12 +9,13 @@ import { getEns } from "../utils/getENS.js";
 import Azuki from "../models/Azuki.js";
 import Invader from "../models/Invader.js";
 import Legend from "../models/Legend.js";
+import BekxArt from "../models/BekxArt.js";
 
 import { web3 } from "../utils/web3Init.js";
 
 export const saveSnapshot = async (items, collection) => {
   try {
-    const entity = {
+    let entity = {
       snapshot: {
         entries: items.ownerArray,
       },
@@ -29,6 +31,9 @@ export const saveSnapshot = async (items, collection) => {
           break;
         case "legends":
           await Legend(entity).save();
+          break;
+        case "bekxArt":
+          await BekxArt(entity).save();
           break;
       }
       console.log(`${collection} Snaphot saved`);
@@ -58,6 +63,9 @@ const ownerOf = async (supply, collection) => {
         case "invaders":
           owner = await invadersContract(web3).methods.ownerOf(i).call();
           break;
+        case "bekxArt":
+          owner = await bekxArtContract(web3).methods.ownerOf(i).call();
+          break;
       }
       console.log(i, owner);
       if (ownerArray.some((item) => item.wallet === owner)) {
@@ -76,10 +84,21 @@ const ownerOf = async (supply, collection) => {
   }
 };
 
-const supply = 3334;
+const collectionSupply = (collection) => {
+  switch (collection) {
+    case "azukis":
+    case "legends":
+    case "invaders":
+      return 3334;
+    case "bekxArt":
+      return 113;
+  }
+};
+// const supply = 3334;
 
 export const getPartners = async (collection) => {
   console.log(collection);
+  const supply = collectionSupply(collection);
   const ownerList = await ownerOf(supply, collection);
   await saveSnapshot(ownerList, collection);
   // safeToFile(azukis.ownerArray, "azukis");
