@@ -2,6 +2,7 @@ import Azuki from "../models/Azuki.js";
 import BekxArt from "../models/BekxArt.js";
 import Invader from "../models/Invader.js";
 import Legend from "../models/Legend.js";
+import Tiger from "../models/Tiger.js";
 
 const all = async (collections) => {
   let topHolders = [];
@@ -43,7 +44,8 @@ export const TopHolders = async () => {
   const legends = await Legend.findOne().sort("-_id");
   const invaders = await Invader.findOne().sort("-_id");
   const bekxArt = await BekxArt.findOne().sort("-_id");
+  const tigers = await Tiger.findOne().sort("-_id");
 
-  const topHolders = await all({ azukis, legends, invaders, bekxArt });
+  const topHolders = await all({ azukis, legends, invaders, bekxArt, tigers });
   return topHolders;
 };

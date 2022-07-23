@@ -3,7 +3,7 @@ import { schedule } from "node-cron";
 // import { safeToFile } from "../utils/safeToFile.js";
 // import invaderWallets from "../services/invaderWallets.js";
 
-// import { getPartners } from "../services/getPartners.js";
+import { getPartners } from "../services/getPartners.js";
 
 // const fetchBekx = async () => {
 //   console.log("fetching starts");
