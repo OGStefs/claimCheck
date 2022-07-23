@@ -2,6 +2,8 @@ import azukiContract from "../blockchain/abi/azukiAbi.js";
 import legendsContract from "../blockchain/abi/legendsAbi.js";
 import invadersContract from "../blockchain/abi/invadersAbi.js";
 import bekxArtContract from "../blockchain/abi/bekxArtAbi.js";
+import tigersContract from "../blockchain/abi/tigersAbi.js";
+import wzkdContract from "../blockchain/abi/wzkdAbi.js";
 
 // import { safeToFile } from "../safeToFile.js";
 import { getEns } from "../utils/getENS.js";
@@ -12,6 +14,8 @@ import Legend from "../models/Legend.js";
 import BekxArt from "../models/BekxArt.js";
 
 import { web3 } from "../utils/web3Init.js";
+import Tiger from "../models/Tiger.js";
+import Wzkd from "../models/Wzkd.js";
 
 export const saveSnapshot = async (items, collection) => {
   try {
@@ -34,6 +38,12 @@ export const saveSnapshot = async (items, collection) => {
           break;
         case "bekxArt":
           await BekxArt(entity).save();
+          break;
+        case "tigers":
+          await Tiger(entity).save();
+          break;
+        case "wzkd":
+          await Wzkd(entity).save();
           break;
       }
       console.log(`${collection} Snaphot saved`);
@@ -66,6 +76,14 @@ const ownerOf = async (supply, collection) => {
         case "bekxArt":
           owner = await bekxArtContract(web3).methods.ownerOf(i).call();
           break;
+        case "tigers":
+          owner = await tigersContract(web3)
+            .methods.ownerOf(i - 1)
+            .call();
+          break;
+        case "wzkd":
+          owner = await wzkdContract(web3).methods.ownerOf(i).call();
+          break;
       }
       console.log(i, owner);
       if (ownerArray.some((item) => item.wallet === owner)) {
@@ -92,9 +110,12 @@ const collectionSupply = (collection) => {
       return 3334;
     case "bekxArt":
       return 113;
+    case "tigers":
+      return 3901;
+    case "wzkd":
+      return 4322;
   }
 };
-// const supply = 3334;
 
 export const getPartners = async (collection) => {
   console.log(collection);

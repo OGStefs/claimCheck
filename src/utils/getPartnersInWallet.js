@@ -1,6 +1,6 @@
 import { web3 } from "../utils/web3Init.js";
 import azukiContract from "../blockchain/abi/azukiAbi.js";
-import tigerContract from "../blockchain/abi/tigerAbi.js";
+import tigerContract from "../blockchain/abi/tigersAbi.js";
 import legendsContract from "../blockchain/abi/legendsAbi.js";
 import fundaesContract from "../blockchain/abi/fundaesAbi.js";
 

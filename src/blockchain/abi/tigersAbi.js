@@ -561,11 +561,11 @@ const tigers = [
   },
 ];
 
-const tigerContract = (web3) => {
+const tigersContract = (web3) => {
   return new web3.eth.Contract(
     tigers,
     "0xf4744Ec5D846F7f1a0c5d389F590Cc1344eD3fCf"
   );
 };
 
-export default tigerContract;
+export default tigersContract;

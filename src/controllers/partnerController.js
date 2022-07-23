@@ -2,6 +2,8 @@ import Azuki from "../models/Azuki.js";
 import BekxArt from "../models/BekxArt.js";
 import Invader from "../models/Invader.js";
 import Legend from "../models/Legend.js";
+import Tiger from "../models/Tiger.js";
+import Wzkd from "../models/Wzkd.js";
 import { TopHolders } from "../services/getTopHolders.js";
 
 export const getTopHolders = async (req, res) => {
@@ -43,6 +45,24 @@ export const getInvadersSnapshot = async (req, res) => {
 export const getBekxArtSnapshot = async (req, res) => {
   try {
     const snapshot = await BekxArt.findOne().sort("-_id");
+    res.status(200).json(snapshot);
+  } catch (error) {
+    res.status(500).json({ message: error.errors });
+  }
+};
+
+export const getTigersSnapshot = async (req, res) => {
+  try {
+    const snapshot = await Tiger.findOne().sort("-_id");
+    res.status(200).json(snapshot);
+  } catch (error) {
+    res.status(500).json({ message: error.errors });
+  }
+};
+
+export const getWzkdSnapshot = async (req, res) => {
+  try {
+    const snapshot = await Wzkd.findOne().sort("-_id");
     res.status(200).json(snapshot);
   } catch (error) {
     res.status(500).json({ message: error.errors });

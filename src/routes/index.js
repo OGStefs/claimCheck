@@ -5,6 +5,8 @@ import {
   getInvadersSnapshot,
   getTopHolders,
   getBekxArtSnapshot,
+  getTigersSnapshot,
+  getWzkdSnapshot,
 } from "../controllers/partnerController.js";
 const router = express.Router();
 
@@ -22,6 +24,8 @@ router.get("/api/v1/legends", getLegendsSnapshot);
 router.get("/api/v1/azukis", getAzukiSnapshot);
 router.get("/api/v1/invaders", getInvadersSnapshot);
 router.get("/api/v1/bekxart", getBekxArtSnapshot);
+router.get("/api/v1/tigers", getTigersSnapshot);
+router.get("/api/v1/wzkd", getWzkdSnapshot);
 
 router.get("/api/v1/topholders", getTopHolders);
 
