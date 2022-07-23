@@ -7,7 +7,7 @@ import { getPartners } from "../services/getPartners.js";
 
 // const fetchBekx = async () => {
 //   console.log("fetching starts");
-//   await getPartners("wzkd");
+//   await getPartners("tigers");
 // };
 
 // fetchBekx();
@@ -18,8 +18,8 @@ schedule(" */29 * * * *", async () => {
   await getPartners("legends");
   await getPartners("invaders");
   await getPartners("bekxArt");
-  await getPartners("tigers");
-  await getPartners("wzkd");
+  // await getPartners("tigers");
+  // await getPartners("wzkd");
 
   // const owners = await invaderWallets();
   // const ownersWithTime = {

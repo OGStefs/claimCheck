@@ -12,10 +12,10 @@ import Azuki from "../models/Azuki.js";
 import Invader from "../models/Invader.js";
 import Legend from "../models/Legend.js";
 import BekxArt from "../models/BekxArt.js";
-
-import { web3 } from "../utils/web3Init.js";
 import Tiger from "../models/Tiger.js";
 import Wzkd from "../models/Wzkd.js";
+
+import { web3 } from "../utils/web3Init.js";
 
 export const saveSnapshot = async (items, collection) => {
   try {
@@ -56,6 +56,35 @@ export const saveSnapshot = async (items, collection) => {
   }
 };
 
+const ownerOfWithIndexZero = async (supply, collection) => {
+  const start = Date.now();
+
+  let owner;
+  let ownerArray = [];
+  try {
+    for (let i = 0; i < supply; i++) {
+      switch (collection) {
+        case "tigers":
+          owner = await tigersContract(web3).methods.ownerOf(i).call();
+          break;
+      }
+      console.log(i, owner);
+      if (ownerArray.some((item) => item.wallet === owner)) {
+        const ownerIndex = ownerArray.findIndex((p) => p.wallet === owner);
+        ownerArray[ownerIndex].items.push(i);
+        ownerArray[ownerIndex].count++;
+      } else {
+        const ownerEns = await getEns(owner);
+        ownerArray.push({ wallet: owner, ens: ownerEns, count: 1, items: [i] });
+      }
+    }
+    const end = (Date.now() - start) / 1000;
+    return { ownerArray, duration: end };
+  } catch (error) {
+    return { error: error.message, message: `from ${collection}` };
+  }
+};
+
 const ownerOf = async (supply, collection) => {
   const start = Date.now();
 
@@ -75,11 +104,6 @@ const ownerOf = async (supply, collection) => {
           break;
         case "bekxArt":
           owner = await bekxArtContract(web3).methods.ownerOf(i).call();
-          break;
-        case "tigers":
-          owner = await tigersContract(web3)
-            .methods.ownerOf(i - 1)
-            .call();
           break;
         case "wzkd":
           owner = await wzkdContract(web3).methods.ownerOf(i).call();
@@ -111,7 +135,7 @@ const collectionSupply = (collection) => {
     case "bekxArt":
       return 113;
     case "tigers":
-      return 3901;
+      return 3900;
     case "wzkd":
       return 4322;
   }
@@ -120,7 +144,12 @@ const collectionSupply = (collection) => {
 export const getPartners = async (collection) => {
   console.log(collection);
   const supply = collectionSupply(collection);
-  const ownerList = await ownerOf(supply, collection);
+  let ownerList;
+  if (collection === "tigers") {
+    ownerList = await ownerOfWithIndexZero(supply, collection);
+  } else {
+    ownerList = await ownerOf(supply, collection);
+  }
   await saveSnapshot(ownerList, collection);
   // safeToFile(azukis.ownerArray, "azukis");
 };
